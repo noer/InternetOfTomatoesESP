@@ -1,0 +1,12 @@
+class Config:
+    mqtt_server = 'mqtt.flespi.io'
+    mqtt_user = "token"
+    mqtt_pass = ""
+    ID = 3
+
+    enable_adc = 1
+    enable_dht = 1
+    enable_led = 0
+
+    wifi_ssid = 'ssid'
+    wifi_password = 'pass'

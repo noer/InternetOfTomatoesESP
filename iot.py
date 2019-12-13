@@ -30,7 +30,10 @@ wifinet = wifi.Wifi(Config.wifi_ssid, Config.wifi_password)
 from machine import RTC
 import ntptime
 rtc = RTC()
-#ntptime.settime()
+try:
+    ntptime.settime()
+except OSError as e:
+    pass
 print(rtc.datetime())
 
 
@@ -101,6 +104,7 @@ try:
         # Then need to sleep to avoid 100% CPU usage (in a real
         # app other useful actions would be performed instead)
         time.sleep(1)
+
         if time.time() % 30 == 0:
             sensor.measure()   # Poll sensor
             t = sensor.temperature()
@@ -109,6 +113,13 @@ try:
             h = sensor.humidity()
             if isinstance(h, float):  # Confirm sensor results are numeric
                 mqtt_client.publish(topic_sensor, gen_json_message('humidity', h))
+
+        if time.time() % 300 == 0:
+            try:
+                ntptime.settime()
+            except OSError as e:
+                pass
+
 
 except OSError as e:
     restart_and_reconnect()
